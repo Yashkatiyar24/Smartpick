@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply font-sans text-gray-900 bg-white;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background: rgba(0, 113, 227, 0.15);
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 100px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+  }
+}
+
+@layer components {
+  /* Apple-style section backgrounds */
+  .section-light {
+    @apply bg-white;
+  }
+
+  .section-muted {
+    @apply bg-[#f5f5f7];
+  }
+
+  /* Subtle card — no harsh borders */
+  .card {
+    @apply bg-white rounded-2xl transition-all duration-300;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04),
+                0 1px 2px rgba(0, 0, 0, 0.04),
+                0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+  .card:hover {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04),
+                0 2px 4px rgba(0, 0, 0, 0.04),
+                0 12px 40px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Apple blue accent button */
+  .btn-apple {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-medium text-sm text-white transition-all duration-200;
+    background-color: #0071e3;
+  }
+  .btn-apple:hover {
+    background-color: #0077ED;
+  }
+  .btn-apple:active {
+    background-color: #006edb;
+    transform: scale(0.98);
+  }
+  .btn-apple:disabled {
+    @apply opacity-40 cursor-not-allowed;
+    transform: none;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200;
+    color: #0071e3;
+  }
+  .btn-ghost:hover {
+    background-color: rgba(0, 113, 227, 0.06);
+  }
+}
+
+@layer utilities {
+  /* Apple headline gradient — very subtle, only on hero */
+  .text-gradient-hero {
+    background: linear-gradient(to right, #1d1d1f, #6e6e73);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Fade-in animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out both;
+  }
+}
