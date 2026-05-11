@@ -34,6 +34,8 @@ app.use(express.json());
 // Import recommendation route
 const recommendRoute = require('./routes/recommend');
 
+const fs = require('fs');
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
@@ -42,7 +44,8 @@ app.get('/api/health', (req, res) => {
 // Product catalog endpoint — serves the sample product data
 app.get('/api/products', (req, res) => {
   try {
-    const products = require('./data/products.json');
+    const productsPath = path.join(__dirname, 'data', 'products.json');
+    const products = JSON.parse(fs.readFileSync(productsPath, 'utf8'));
     res.json(products);
   } catch (error) {
     console.error('Error loading products:', error);
@@ -53,17 +56,22 @@ app.get('/api/products', (req, res) => {
 // AI recommendation endpoint
 app.use('/api/recommend', recommendRoute);
 
-// ==================== START SERVER ====================
+// ==================== START SERVER / EXPORT ====================
 
-app.listen(PORT, () => {
-  console.log(`\n🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📦 Products API: http://localhost:${PORT}/api/products`);
-  console.log(`🤖 Recommend API: http://localhost:${PORT}/api/recommend`);
-  console.log(`❤️  Health Check:  http://localhost:${PORT}/api/health\n`);
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📦 Products API: http://localhost:${PORT}/api/products`);
+    console.log(`🤖 Recommend API: http://localhost:${PORT}/api/recommend`);
+    console.log(`❤️  Health Check:  http://localhost:${PORT}/api/health\n`);
 
-  // Warn if Gemini API key is not set
-  if (!process.env.GEMINI_API_KEY) {
-    console.warn('⚠️  WARNING: Gemini API key is not configured!');
-    console.warn('   Set GEMINI_API_KEY in server/.env to enable AI recommendations.\n');
-  }
-});
+    // Warn if Gemini API key is not set
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn('⚠️  WARNING: Gemini API key is not configured!');
+      console.warn('   Set GEMINI_API_KEY in server/.env to enable AI recommendations.\n');
+    }
+  });
+}
+
+// Export for Vercel serverless functions
+module.exports = app;
